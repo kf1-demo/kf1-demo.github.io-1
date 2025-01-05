@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+  <title>報名表 Application Form</title>
+
+  <!-- Vuetify CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+
+  <!-- Material Design Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+
+  <!-- Vue.js -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+
+  <!-- Vuetify -->
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@2.3.2/dist/signature_pad.min.js"></script>
+
+  <style>
+    #linkTextarea_btn{
+      background-color: #1976d2 !important;
+      border-color: #1976d2 !important;
+      color: #fff;
+      border-radius: 4px;
+      min-width: 300px;
+    }
+
+    #linkTextarea_btn i{
+      font-size: 20px;
+      padding-top: 7px;
+    }
+    #linkTextarea{
+      display:none;
+    }
+    .linkTextarea{
+      border: 1px solid #ccc !important;
+      padding: 20px;
+      border-radius: 20px;
+    }
+    
+    .guardianName-v-text-field label {
+      display: inline-block;
+      height: 40px !important;
+      top: -20px !important;
+    }
+
+    .guardianName-v-text-field .v-label--active {
+      display: inline-block;
+      height: 40px !important;
+      top: -5px !important;
+    }
+
+    [v-cloak] {
+      display: none;
+    }
+
+    .logo-container {
+      position: absolute;
+      height: 120px;
+      width: 100%;
+      max-width: 300px;
+    }
+
+    .logo-image {
+      position: absolute;
+      left: 0;
+      top: 0;
+      max-height: 120px;
+      margin: 8px;
+      object-fit: contain;
+    }
+
+    @media (max-width: 960px) {
+      .logo-container {
+        max-width: 250px;
+      }
+
+      .logo-image {
+        max-height: 100px;
+      }
+    }
+
+    @media (max-width: 660px) {
+      .logo-container {
+        position: relative;
+        height: 100px;
+        max-width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-bottom: 16px;
+      }
+
+      .logo-image {
+        position: relative;
+        max-height: 80px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .logo-container {
+        height: 80px;
+      }
+
+      .logo-image {
+        max-height: 60px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  
+  <div id="app" v-cloak>
+    <v-app>
+      <v-main>
+        <v-container>
+          <v-row justify="center">
+            <v-col cols="12" md="10">
+              <v-card class="mx-auto">
+                <!-- Logo and Header -->
+                <div class="logo-container">
+                  <img :src="logoUrl" class="logo-image" />
+                </div>
+
+                <v-card-title class="text-center justify-center">
+                  <h1 class="text-h4 font-weight-bold" style="color: rgb(102, 102, 102);">報名表</h1>
+                </v-card-title>
+                <v-card-title class="text-center justify-center pt-0">
+                  <h1 class="text-h4 font-weight-bold" style="color: rgb(102, 102, 102);">Application
+                    Form</h1>
+                </v-card-title>
+
+                <!-- Stepper -->
+                <v-stepper v-model="currentStep">
+                  <!-- Stepper Headers -->
+                  <v-stepper-header>
+                    <v-stepper-step :complete="currentStep > 1" step="1">
+                      免責聲明
+                      <small>Disclaimer</small>
+                    </v-stepper-step>
+
+                    <v-divider></v-divider>
+
+                    <v-stepper-step :complete="currentStep > 2" step="2">
+                      個人資料
+                      <small>Personal Information</small>
+                    </v-stepper-step>
+                    <v-divider></v-divider>
+                    <v-stepper-step step="3">
+                      完成
+                      <small>Finish</small>
+                    </v-stepper-step>
+                  </v-stepper-header>
+
+                  <!-- Stepper Content -->
+                  <v-stepper-items>
+                    <!-- Step 1: Disclaimer -->
+                    <v-stepper-content step="1">
+                      <v-card class="mb-12" outlined>
+                        <v-card-text>
+                          <b>注意事項及免責聲明:</b>
+                          <b>Notes, Participant's Disclaimer and
+                                                        Declaration:</b>
+
+                          <div class="terms-section mb-6">
+                            <p class="mb-4">參加由 KF1 INTERNATIONAL COMPANY
+                              LIMITED（以下稱為「本公司」）組織的課程的首次參加者（包括但不限於泰拳課程、瑜伽課程、健身課程及任何運動課程或工作坊）必須仔細閱讀以下條款並簽署此免責聲明協議（以下稱為「本協議」），以便參加本公司組織的課程。
+                            </p>
+                            <p class="mb-4">
+                              Participants attending classes organized by KF1
+                              INTERNATIONAL COMPANY LIMITED (hereinafter referred to as
+                              "The company") for the first time (including but not limited
+                              to Muay Thai classes, yoga classes, fitness classes, and any
+                              sports courses/ workshops) must read the following terms
+                              carefully and sign this disclaimer agreement (hereinafter
+                              referred to as "this Agreement") in order to participate in
+                              the classes organized by the company.
+                            </p>
+                          </div>
+
+                          <!-- Original Disclaimer Items -->
+                          <div class="disclaimer-section">
+                            <template v-for="(item, i) in disclaimerItems" :key="i">
+                              <div class="d-flex align-start mb-4">
+                                <span class="text-subtitle-1 mr-2">{{ i + 1 }}.</span>
+                                <div class="pl-2">
+                                  <p class="mb-2">{{ item.contentCh }}</p>
+                                  <p class="grey--text">{{ item.contentEn }}</p>
+                                </div>
+                              </div>
+                            </template>
+                          </div>
+
+                          <!-- Terms and Conditions -->
+                          <div class="terms-section mb-6">
+                            <b>條款及條件 Terms and Conditions</b>
+                            <p class="mb-4">
+                              使用本公司網站[https://www.kf1-hk.com/]）（「本公司站」）時，您必須同意遵守以下條款（「條款」），這些款可能會不時修訂。在用本公司網站之前，您有責任閱讀隱私政策（「隱私政策」）。使用本公司站和/或提供您的個人信息意味著您已同意隱私政策。
+                            </p>
+                            <p class="mb-4">When using the Company's website
+                              ([https://www.kf1-hk.com/]) ("Company's Website"), you must
+                              agree to abide by the following terms (the "Terms"), which
+                              may be amended from time to time. Before using the Company's
+                              Website, you have the responsibility to read the privacy
+                              policy (the "Private Policy"). Using the Company's Website
+                              and/or providing your personal information implies that you
+                              have consented to the Privacy Policy.</p>
+
+                            <!-- 其他條款內容 -->
+                            <b>使用本公司網站 Use of the Company's Website
+                                                        </b>
+                            <p class="mb-4">本公司網站由本公司擁有和運營。無論是否提前通知，本公司保留隨時暫停或終止您訪問網站的權利。
+                            </p>
+                            <p class="mb-4">The Company's Website is owned and operated by
+                              the Company. Whether or not prior notice is given, the
+                              Company reserves the right to suspend or terminate your
+                              access to the website at any time.</p>
+
+
+                            <b>權利 Rights</b>
+                            <p class="mb-4">所有展示在本公司網站上的內容（「內容」）的所有知識產權，包括版權，均由本公司及其附屬機構擁有。
+                            </p>
+                            <p class="mb-4">All intellectual property rights, including
+                              copyrights, for the content displayed on the Company's
+                              Website (the "Content") are owned by the Company and its
+                              affiliates.</p>
+
+                            <b>網站內容的使用 Use of Website Content</b>
+                            <p class="mb-4">
+                              您只能將本公司的網站及其內容用於個人、非商業目的。為此，您可以檢索內容並在您的電腦屏幕上顯示。否則，您同意不下載、複製、修改、存儲、提取、公開展示、再分發或以任何方式商業利用內容的任何部分，除非事先獲得本公司的書面許可。您同意不將本公司的網站或其內容用於非法或不當用途，也不會用於任何可能對他人造成騷擾、不便或困擾的侵權用途。
+                            </p>
+                            <p class="mb-4">Company’s Website and its Content for personal,
+                              non-commercial purposes. For this purpose, you may retrieve
+                              the Content and display it on your computer screen.
+                              Otherwise, you agree not to download, copy, modify, store,
+                              extract, publicly display, redistribute, or commercially
+                              exploit any part of the Content in any manner without prior
+                              written permission from the Company. You agree not to use
+                              the Company’s Website or its Content for illegal or
+                              inappropriate purposes, nor for any infringing purposes that
+                              may cause harassment, inconvenience, or distress to others.
+                            </p>
+                            <p class="mb-4">
+                              您同意遵守內容中包含的所有版權通知和限制，並不得以任何方式刪除或更改這些通知或限制或更改相關內容。</p>
+                            <p class="mb-4">You also agree to comply with all copyright
+                              notices and restrictions contained in the Content and not to
+                              remove or alter such notices or restrictions in any way or
+                              change the relevant Content.</p>
+
+                            <b>責任範圍和免責聲明 Scope of Liability and
+                                                            Disclaimer</b>
+                            <p class="mb-4">內容由本公司從各種來源獲取，包括事實、意見和網站用戶可能覺得有趣的信息。</p>
+                            <p class="mb-4">obtained by the Company from various sources,
+                              including facts, opinions, and information that website
+                              users may find interesting.</p>
+                            <p class="mb-4">
+                              雖然我們已在各方面採取合理的謹慎措施，但我們無法保證本公司及其內容是準確的、完整的、及時的、適用的或適合任何特定目的。我們對本公司網站上任何意見、建議、推薦或建議，以及任何鏈接網站或員工提供的網站不承擔任何責任。
+                            </p>
+                            <p class="mb-4">Although we have taken reasonable care in all
+                              respects, we cannot guarantee that the Company and its
+                              Content are accurate, complete, timely, applicable, or
+                              appropriate for any specific purpose. We will not accept any
+                              liability for any opinions, recommendations, endorsements,
+                              or advice contained in the Company's Website, any linked
+                              websites or any websites provided by the staff.</p>
+                            <p class="mb-4">內容僅供您參考，並不應被視為具體建議或意見，因為每個人的情況可能不同。</p>
+                            <p class="mb-4">provided for your informational purposes only
+                              and should not be regarded as specific recommendations or
+                              advice, as individual circumstances may vary.</p>
+                            <p class="mb-4">
+                              在根據全部或部分內容採取任何行動或做出任何決定之前，您應驗證可能影響您決定行動的任何信息。您還應尋求適當的專業建議（例如，醫療議）。
+                            </p>
+                            <p class="mb-4">Before taking any action or making any decisions
+                              based on all or part of the Content, you should verify any
+                              information that may affect your decision or action. You
+                              should also seek appropriate professional advice (e.g.,
+                              medical advice).</p>
+                            <p class="mb-4">本公司無法保證其網站不含病毒或其他有害內容，或網站與所有計算機系統、軟件或瀏覽器兼容。</p>
+                            <p class="mb-4">The Company cannot guarantee that its website
+                              will be free of viruses or other harmful content, or that
+                              the Website will be compatible with all computer systems,
+                              software, or browsers.</p>
+                            <p class="mb-4">本公司排除所有暗示的保證或責任，除非法律規定不能排除此類暗示的保證或責任。</p>
+                            <p class="mb-4">The Company exclude all implied warranties or
+                              liabilities unless such implied warranties or liabilities
+                              cannot be excluded by law.</p>
+                            <p class="mb-4">
+                              本公司不對因您使用或無法使用本公司網站及其內容而產生的任何索賠、損失、受傷、罰款、損害、成本或費用負責，或對根據本公司網站採取或未採取的任何行動負責。
+                            </p>
+                            <p class="mb-4">The Company is not responsible for any claims,
+                              losses, injuries, fines, damages, costs, or expenses arising
+                              from your use of or inability to use the Company's Website
+                              and its Content, or any actions taken or not taken based on
+                              the Company's Website.</p>
+                            <p class="mb-4">
+                              在法律允許的最大範圍內，您同意本公司對因使用本公司網站或其內容或任何違反本公司條款而產生的任何損失（包括但不限於損失、隱私違規或未能履行任何義務）或任何直接、間接、特殊或懲罰性損害不承擔責任。
+                            </p>
+                            <p class="mb-4">To the maximum extent permitted by law, you
+                              agree that the Company shall not be liable for any losses
+                              (including but not limited to losses, privacy breaches, or
+                              failure to fulfill any obligations) or any direct, indirect,
+                              special, or punitive damages arising from your use of the
+                              Company's website or its Content or any violations of the
+                              Company's Terms.</p>
+
+                            <b>鏈接 Links</b>
+                            <p class="mb-4">
+                              本公司的網站包含與本公司完全無關的其他方建立的網站鏈接。這些鏈接僅供您方便和參考，並且本公司對其內容、操作或可用性不承擔任何責。
+                            </p>
+                            <p class="mb-4">The Company's website contains links to websites
+                              established by other parties that are completely unrelated
+                              to the Company. Such links are provided for your convenience
+                              and reference only, and the Company is not responsible in
+                              any way for their content, operations, or availability.
+                            </p>
+
+                            <b>條款的變更 Changes to These Terms</b>
+                            <p class="mb-4">
+                              本公司保留更改網站任何部分以及加或修改這些條款或隱私政策的權利。您有責任在使用本公司網站時閱讀這些條款。通過使用本公司的網站您同意遵守這些條款和隱私政策，這些條款和政策可能不時修訂或修改。
+                            </p>
+                            <p class="mb-4">The Company reserves the right to change any
+                              part of its website and to add or modify these Terms or the
+                              privacy policy. You have the responsibility to read these
+                              Terms when using the Company's website. By using the
+                              Company's Website, you agree to comply with these Terms and
+                              the privacy policy, which may be amended or revised from
+                              time to time.
+                            </p>
+
+                            <b>不退款政策 Non-Refund Policy</b>
+                            <p class="mb-4">
+                              在任何情況下，無論您是否已開始或完成項目或用戶會員資格因用戶違反使用條款及條件而被終止，所有費用概不退還。</p>
+                            <p class="mb-4">In any case, whether you have started or
+                              completed a project, or your membership is terminated due to
+                              a breach of the terms and conditions, all fees are
+                              non-refundable.</p>
+
+                            <b>香港法律 Hong Kong Laws</b>
+                            <p class="mb-4">
+                              通過使用本公司的網站，您同意接受受香港法律管轄的條款。因這些條款或使用本公司的網站或內容而生的任何爭議，均應受香港法院的專屬管轄。
+                            </p>
+                            <p class="mb-4">By using the Company's website, you agree to
+                              accept the Terms that are governed by and constructed in
+                              accordance with the laws of Hong Kong. Any disputes arising
+                              in connection with these Terms or as a result of using the
+                              Company's website or the Content shall be subject to the
+                              exclusive jurisdiction of the courts of Hong Kong.</p>
+
+                            <b>隱私政策 Privacy Policy</b>
+                            <p class="mb-4">您提供的信息將用於報名和促進由"本公司"的活動。</p>
+                            <p class="mb-4">Your information provided will be used for the
+                              enrolment and promotion of reaction and organized by the
+                              "Company".</p>
+
+                            <b>收集個人資料 Personal Data Collection</b>
+                            <p class="mb-4">
+                              您向本公司提供的個人資料只會用作履行本公司和您之間的合約，並可能會根據法律規定交給政府部門及司法當局。根據法律規定，您可向本公司要求查閱及更正其個人資料。
+                            </p>
+                            <p class="mb-4">The personal data you provide to our company
+                              will only be used to fulfill the contract between our
+                              company and you, and may be disclosed to government
+                              departments and judicial authorities as required by law.
+                              According to legal provisions, you may request to access
+                              and correct your personal data held by our company.</p>
+                          </div>
+
+
+
+
+                        </v-card-text>
+                      </v-card>
+                      <!-- Agreement Checkbox -->
+                      <v-checkbox v-model="agreement"
+                        :rules="[v => !!v || '請同意條款及細則 Please agree to the terms and conditions']"
+                        label="本人已閱讀並同意以上條款及細則。 I have read and agreed to the above terms and conditions." required>
+                      </v-checkbox>
+                      <v-btn color="primary" @click="nextStep" :disabled="!agreement" style="width: 100%">
+                        下一步 Next
+                      </v-btn>
+                    </v-stepper-content>
+
+                    <!-- Step 2: Personal Information Form -->
+                    <v-stepper-content step="2">
+                      <v-form ref="form" v-model="valid" @submit.prevent="submitForm">
+                        <v-row>
+                          <v-col cols="12" md="6">
+                            <v-text-field v-model="formData.chineseName" :rules="nameRules" label="中文姓名 Chinese Name"
+                              required></v-text-field>
+                          </v-col>
+
+                          <v-col cols="12" md="6">
+                            <v-text-field v-model="formData.englishName" :rules="nameRules" label="英文姓名 English Name"
+                              required></v-text-field>
+                          </v-col>
+
+                          <v-col cols="12" md="6">
+                            <v-menu ref="menu" v-model="menu" :close-on-content-click="false"
+                              transition="scale-transition" offset-y min-width="auto">
+                              <template v-slot:activator="{ on, attrs }">
+                                <v-text-field v-model="formData.dateOfBirth" label="生日日期 Date of Birth"
+                                  :rules="requiredRules" readonly v-bind="attrs" v-on="on" required></v-text-field>
+                              </template>
+                              <v-date-picker v-model="formData.dateOfBirth"
+                                :max="new Date().toISOString().substr(0, 10)" min="1920-01-01" @change="menu = false">
+                              </v-date-picker>
+                            </v-menu>
+                          </v-col>
+                          <v-col cols="12" md="6">
+                            <v-text-field v-model="formData.date" label="日期 Date" disabled></v-text-field>
+                          </v-col>
+                          <v-col cols="12" md="6">
+                            <v-text-field v-model="formData.idNumber" :rules="idRules" label="身份證件號碼 ID Number"
+                              required></v-text-field>
+                          </v-col>
+
+                          <v-col cols="12" md="6">
+                            <v-select v-model="formData.gender" :items="genderOptions" label="性別 Gender"
+                              :rules="requiredRules" required>
+                            </v-select>
+                          </v-col>
+
+                          <v-col cols="12" md="6">
+                            <v-text-field v-model="formData.tel" :rules="phoneRules" label="電話號碼 Phone Number" required>
+                            </v-text-field>
+                          </v-col>
+
+                          <v-col cols="12" md="6">
+                            <v-text-field v-model="formData.email" :rules="emailRules" label="電郵地址 Email Address"
+                              required></v-text-field>
+                          </v-col>
+                          <v-col cols="12">
+                            <my-signature :item="formData.signature" :error="displaySignError"
+                              @update-value="updateDisplaySignErrorParentValue"></my-signature>
+                          </v-col>
+        
+                          <v-col cols="12" v-if='false' >
+                            <v-text-field class="guardianName-v-text-field" v-model="formData.guardianName" :rules="nameRules" v-if='isUnder18()' required>
+                              <template v-slot:label>
+                                家長或監護人姓名（適用於未滿18歲參加者）<br>Parent or Guardian Name
+                                                                (Applicable to participants under 18 years old)
+                              </template>
+                            </v-text-field>
+                          </v-col>
+                          <v-col cols="12" v-if='false'>
+                            <guardian-signature :item="formData.guardianSignature" :error="displayGuardianSignError"
+                              @update-value="updateDisplayGuardianSignErrorParentValue">
+                            </guardian-signature>
+                          </v-col>
+
+
+                          <!-- Emergency Contact Fields -->
+                          <v-col cols="12" md="6">
+                            <v-text-field v-model="formData.emergencyContact" :rules="nameRules"
+                              label="緊急聯絡人 Emergency Contact" required></v-text-field>
+                          </v-col>
+
+                          <v-col cols="12" md="6">
+                            <v-text-field v-model="formData.emergencyPhone" :rules="phoneRules"
+                              label="緊急聯絡人電話 Emergency Contact Number" required></v-text-field>
+                          </v-col>
+
+                          <v-col cols="12" md="6">
+                            <v-text-field v-model="formData.emergencyRelationship" :rules="requiredRules"
+                              label="與緊急聯絡人關係 Relationship" required></v-text-field>
+                          </v-col>
+                        </v-row>
+                        <v-row v-if='false'>
+                          <v-col cols="12" md="6" v-if='isUnder18()' >
+                            <v-text-field class="guardianName-v-text-field" v-model="formData.guardianName" :rules="nameRules" v-if='isUnder18()' required>
+                              <template v-slot:label>
+                                家長或監護人姓名（適用於未滿18歲參加者）<br>Parent or Guardian Name
+                                                                (Applicable to participants under 18 years old)
+                              </template>
+                            </v-text-field>
+                          </v-col>
+                          <v-col cols="12" md="6" v-if='isUnder18()'>
+                            <v-text-field v-model="formData.guardianEmail" :rules="emailRules" label="家長或監護人電郵地址 Parent or Guardian Email Address" :rules="emailRules" 
+                              required></v-text-field>
+                          </v-col>
+                        </v-row>
+
+
+
+                        <div class="d-flex mt-10">
+                          <v-btn class="flex-grow-1 mr-2" @click="previousStep" style="width: 50%">
+                            返回 Back
+                          </v-btn>
+
+                          <v-btn color="primary" type="submit" style="width: 50%">
+                            提交 Submit
+                          </v-btn>
+                        </div>
+                      </v-form>
+                    </v-stepper-content>
+
+
+                    <v-stepper-content step="3" class="text-center">
+                      <div v-if='!api_response.is_under_18'>
+                        <v-icon color="green" size="48" class="mb-2">mdi-check-circle</v-icon>
+                        <div class="text-h5 font-weight-bold mb-2">完成</div>
+                      </div>
+                      <div v-if='api_response.is_under_18'>
+                        <v-icon color="yellow" size="48" class="mb-2">mdi-alert-circle</v-icon>
+                        <div class="text-h5 font-weight-bold mb-2">未完成, 請發送連結給家長或監護人</div>
+                        <textarea cols="30" rows="5" v-model="this.api_response.guardian_signature_link" class="linkTextarea" readonly></textarea>
+                        <p id="linkTextarea" v-html="this.api_response.guardian_signature_link"></p>
+                        <br/>
+                        <button id='linkTextarea_btn' onclick="copyToClipboard()">
+                         <v-icon color="white" size="12" class="mb-2">mdi-link</v-icon>
+                         複製連結
+                       </button>
+                       <v-btn id="popupmessage" :style="{ display: 'none' }"  @click="copyLink">Copy Link</v-btn>
+                        <v-snackbar v-model="snackbar" :timeout="3000" color="success" top>
+                          {{ snackbarMessage }}
+                        </v-snackbar>
+                      </div>
+                    </v-stepper-content>
+                  </v-stepper-items>
+                </v-stepper>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-container>
+      </v-main>
+      <v-overlay :value="loading">
+        <v-progress-circular indeterminate size="64"></v-progress-circular>
+      </v-overlay>
+    </v-app>
+  </div>
+
+  <script>
+    const apiCall = function (functionName, params = {}) {
+            params = JSON.stringify(params);
+            return new Promise((resolve, reject) => {
+                google.script.run
+                    .withSuccessHandler((response) => resolve(response))
+                    .withFailureHandler((error) => reject(error))
+                [functionName](params);
+            });
+        };
+
+        // 定義 MySignature component
+        const MySignature = Vue.component("my-signature", {
+            template: `
+            <div>
+              <div
+                class="signature-display"
+                @click="openPad"
+                :style="{ border: error ? '1px solid red' : '1px solid #ccc', padding: '10px', cursor: 'pointer', minHeight: '130px', color: error ? 'red' : 'inherit' }"
+              >
+                <span  :style="{ color:  error ? 'red' : 'rgb(102 102 102)' }" v-html="item.label"></span>
+                <div :style="{ display: 'inline-block', width: '100%', textAlign: 'center', minHeight: '107px' }">
+                    <img v-if="item.value" :src="item.value" alt="Signature" style="max-width: 100%; max-height: 100px;" />
+                    <span v-else v-html="item.placeholder" :style="{ color: '#ccc' }"></span>
+                </div>
+                <div v-if="error" style="color: red;">
+                請簽名 Please sign
+                </div>
+              </div>
+              <v-dialog
+                v-model="dialog"
+                width="400"
+                style="overflow-y: unset !important;"
+                eager
+              >
+                <v-card>
+                  <v-card-title class="text-h5 primary white--text">
+                    簽名 Signature
+                  </v-card-title>
+                  <v-card-text class="pa-0">
+                    <canvas ref="mySignatureCanvas" width="400" height="140"/>
+                  </v-card-text>
+                  <v-divider></v-divider>
+                  <v-card-actions>
+                    <v-spacer></v-spacer>
+                    <v-btn
+                      color="primary"
+                      text
+                      @click="savePad"
+                    >
+                      <span class="mdi mdi-check-circle"></span>
+                    </v-btn>
+                    <v-btn
+                      color="error"
+                      text
+                      @click="clearPad"
+                    >
+                        <span class="mdi mdi-close-circle"></span>
+                    </v-btn>
+                    <v-btn
+                      color="grey"
+                      text
+                      @click="closePad"
+                    >
+                       <span class="mdi mdi-arrow-right-drop-circle"></span>
+                    </v-btn>
+                  </v-card-actions>
+                </v-card>
+              </v-dialog>
+            </div>
+          `,
+            props: {
+                item: Object,
+                error:false,
+            },
+            data: () => ({
+                dialog: false,
+                signaturePad: null
+            }),
+            methods: {
+                openPad: function () {
+                    this.dialog = true;
+                    this.$nextTick(() => {
+                        this.signaturePad = new SignaturePad(this.$refs.mySignatureCanvas);
+                        if (this.item.value) this.signaturePad.fromDataURL(this.item.value);
+                    });
+                },
+                closePad: function () {
+                    this.dialog = false;
+                    if (this.signaturePad.isEmpty()) {
+                        this.error = true
+                        this.$emit('update-value', this.error );
+                    }
+                },
+                clearPad() {
+                    this.signaturePad.clear();
+                },
+                savePad() {
+                    if (this.signaturePad.isEmpty()) {
+                        this.item.value = null;
+                        this.error = true
+                    } else {
+                        this.item.value = this.signaturePad.toDataURL();
+                        this.error = false
+                    }
+                    this.$emit('update-value', this.error );
+                    this.signaturePad.clear();
+                    this.dialog = false;
+                }
+            }
+        });
+
+        const GuardianSignature = Vue.component("guardian-signature", {
+            template: `
+    <div>
+        <div
+        class="signature-display"
+        @click="guardianSignatureOpenPad"
+        :style="{ border: error ? '1px solid red' : '1px solid #ccc', padding: '10px', cursor: 'pointer', minHeight: '130px', color: error ? 'red' : 'inherit' }"
+        >
+            <span :style="{ color:  error ? 'red' : 'rgb(102 102 102)' }" v-html="item.label"></span>
+            <div :style="{ display: 'inline-block', width: '100%', textAlign: 'center', minHeight: '107px' }">
+                <img v-if="item.value" :src="item.value" alt="Signature" style="max-width: 100%; max-height: 100px;" />
+                <span v-else v-html="item.placeholder" :style="{ color: '#ccc' }"></span>
+            </div>
+               <div v-if="error" style="color: red;">
+                請簽名 Please sign
+                </div>
+        </div>
+
+      <v-dialog
+        v-model="dialog"
+        width="400"
+        style="overflow-y: unset !important;"
+        eager
+      >
+        <v-card>
+          <v-card-title class="text-h5 primary white--text">
+            簽名 Signature
+          </v-card-title>
+          <v-card-text class="pa-0">
+            <canvas ref="guardianSignatureCanvas" width="400" height="140"/>
+          </v-card-text>
+          <v-divider></v-divider>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              color="primary"
+              text
+              @click="guardianSignatureSavePad"
+            >
+              <span class="mdi mdi-check-circle"></span>
+            </v-btn>
+            <v-btn
+              color="error"
+              text
+              @click="guardianSignatureClearPad"
+            >
+              <span class="mdi mdi-close-circle"></span>
+            </v-btn>
+            <v-btn
+              color="grey"
+              text
+              @click="guardianSignatureClosePad"
+            >
+              <span class="mdi mdi-arrow-right-drop-circle"></span>
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+    </div>
+  `,
+            props: {
+                item: Object,
+                error:false
+            },
+            data: () => ({
+                dialog: false,
+                guardianSignaturePad: null,
+            }),
+            methods: {
+                guardianSignatureOpenPad: function () {
+                    this.dialog = true;
+                    this.$nextTick(() => {
+                        this.guardianSignaturePad = new SignaturePad(this.$refs.guardianSignatureCanvas);
+                        if (this.item.value) this.guardianSignaturePad.fromDataURL(this.item.value);
+                    });
+                },
+                guardianSignatureClosePad: function () {
+                    this.dialog = false;
+                    if (this.guardianSignaturePad.isEmpty()) {
+                        this.error = true
+                        this.$emit('update-value', this.error );
+                    }
+                },
+                guardianSignatureClearPad() {
+                    this.guardianSignaturePad.clear();
+                },
+                guardianSignatureSavePad() {
+                    if (this.guardianSignaturePad.isEmpty()) {
+                        this.item.value = null;
+                        this.error = true
+                    } else {
+                        this.item.value = this.guardianSignaturePad.toDataURL();
+                        this.error = false
+                    }
+                    this.$emit('update-value', this.error );
+                    this.guardianSignaturePad.clear();
+                    this.dialog = false;
+                }
+            }
+        });
+
+        // 初始化 Vue 實例
+        new Vue({
+            el: '#app',
+            vuetify: new Vuetify(),
+            components: {
+                MySignature,
+                GuardianSignature
+            },
+            data: () => ({
+                disclaimerItems: [
+                    {
+                        title: '1. 參加風險聲明',
+                        contentCh: '參加任何運動都存在潛在受傷的風險。通過參加本公司組織的課程並參與任何體育活動，參加者同意並願意承擔可能由此活動引起的受傷或死亡風險。本公司提醒所有參加者在加入課程之前評估自己身體健康狀況。',
+                        contentEn: 'Engaging in any sport carries the risk of potential injury. By participating in classes organized by the company and engaging in any physical activities during participation, the participant agrees and is willing to assume the risks of injury or death that may result from such activities. The Company reminds all participants to assess their physical fitness and health status before joining the classes.'
+                    },
+                    {
+                        title: '2. 健康狀況聲明',
+                        contentCh: '需要長期服用藥物（例如，哮喘藥、降壓藥、糖病藥物等）或有慢性健康狀況（例如，心臟病、中風、高血壓等）的參加者應諮詢醫生，以確定是否適合參加本公司組織的課程。',
+                        contentEn: 'Participants who require long-term medication (e.g., asthma medication, antihypertensive drugs, diabetes medication, etc.) or who have chronic health conditions (e.g., heart disease, stroke, hypertension, etc.) should consult a doctor to determine whether it is appropriate to participate in the classes organized by the Company.'
+                    },
+                    {
+                        title: '3. 醫生諮詢建議',
+                        contentCh: '本公司強烈建議參加者在參加任何本公司組織的課程之前諮詢醫生，以確保他們的身體狀況適合參加。',
+                        contentEn: 'The Company strongly recommends that participants consult a doctor before attending any classes organized by the Company to ensure their physical condition is suitable for participation.'
+                    },
+                    {
+                        title: '4. 保險建議',
+                        contentCh: '本公司強烈建議參加者根據自己的需求和健康狀況在參加任何本公司組織的課程之前購買適合的保險。',
+                        contentEn: 'The Company strongly recommends that participants purchase suitable insurance based on their individual needs and health conditions before attending any classes organized by the Company.'
+                    },
+                    {
+                        title: '5. 特殊身體狀況申報',
+                        contentCh: '課程開始前，參加者有責任主動告知教練任何特殊的身體狀況，包括但不限於：現有的受傷、月經期、懷孕或任何可能導致肌肉疼痛或瘀傷易感的情況。如果參加者在課程中任何原因受傷（包括但不限於肌肉拉傷、撕裂、扭傷、骨折、瘀傷）或死亡，本公司及其教練在法律允許的最大範圍內不承擔責任。',
+                        contentEn: 'Before the class begins, participants have the responsibility to proactively inform the instructors of any special physical conditions, including but not limited to: existing injuries, menstrual period, pregnancy, or any conditions that may lead to increased susceptibility to muscle pain or bruising. If a participant is injured (including but not limited to muscle strains, tears, pulls, fractures, bruises) or dies during the class due to whatever reason, the Company and its instructors shall not be liable to the fullest extent permitted by law.'
+                    },
+                    {
+                        title: '6. 課堂規則',
+                        contentCh: '課程中，參加者應注意教練的指示，不得使用手機或參與其他活動。如果參加者因不遵循教練的指示或未經許可使用設備而受傷（包括但不限於肌肉拉傷、撕裂、扭傷、骨折、瘀傷）或死亡，本公司及其教練在法律允許的最大範圍內不需承擔責任。',
+                        contentEn: 'During the class, participants should pay attention to the instructor\'s instructions and should not use mobile phones or engage in other activities.If a participant is injured(including but not limited to muscle strains, tears, pulls, fractures, bruises) or dies due to not following the instructor\'s instructions or using equipment without permission, the Company and its instructors shall not be liable to the fullest extent permitted by law.'
+                    },
+                    {
+                        title: '7. 高強度運動聲明',
+                        contentCh: '本公司組織的程涉及高能量的運動或在高溫環境下短時間的運動。參加者有責任評估自己的狀況或諮詢醫生，以確定自己是否適合參加這些活動。',
+                        contentEn: 'The classes organized by the Company involve high-energy exercises or exercising in high-temperature environments for a short duration. Participants have the responsibility to evaluate their condition or consult a doctor to determine whether they are fit to participate in such activities.'
+                    },
+                    {
+                        title: '8. 個人能力限制',
+                        contentCh: '在參加所有課程時，參加者應在自己的能力範圍內行動，不得進行超出自身體能的動作。如果感到不適，應立即停止並休息。',
+                        contentEn: 'While attending all classes, participants should act within their limits and should not perform actions beyond their physical capabilities. If feeling unwell, they should stop immediately and rest.'
+                    },
+                    {
+                        title: '9. 個人財物責任',
+                        contentCh: '本公司呼籲所有參加者注意個人貴物的安全。參加者應妥善保管個人物品。本公司、其教練及其工作人員對任何丟失、被盜或損壞的個人貴物不承擔責任。',
+                        contentEn: 'The Company urges all participants to pay attention to the safety of their personal belongings. Participants should keep their personal items secure. The Company, its instructors, and its staff are not responsible for any lost, stolen, or damaged personal property.'
+                    },
+                    {
+                        title: '10. 條款修改權',
+                        contentCh: '本公司保留修改本協議條款的權利。如有任何爭議，本公司保留最終決策權。',
+                        contentEn: 'The Company reserves the right to amend the terms of this Agreement. In case of any disputes, the Company reserves the final decision-making authority.'
+                    },
+                    {
+                        title: '11. 法律管轄',
+                        contentCh: '本協議應受香港特別行政區（「香港」）法律管轄並依其解釋。香港法院對因本協議引起的任何爭議擁有專屬管轄權。',
+                        contentEn: 'This Agreement shall be governed by and construed in accordance with the laws of the Hong Kong Special Administrative Region ("Hong Kong"). The courts of Hong Kong shall have exclusive jurisdiction over any disputes arising from this Agreement.'
+                    },
+                    {
+                        title: '12. 緊急醫療處理',
+                        contentCh: '參加者確認並同意比賽期間，如發生意外，接受公司提供的任何現場緊急醫療處理。參加者將承擔所有醫療費用、住院費用及與此類意外相關的任何直接或間接費用。如果參加者失去意識，公司的緊急志願者可以採取所有必要措施提供急救，包括但不限於心肺復甦術（CPR、使用自動體外除顫器（AED），以及租用車輛或飛機進行快速運輸。因此產生的任何法律責任及相關費用將由加全權承擔，參加者不會將任何法律或財務責任歸咎於公司、參與救援的工作人員或任何緊急志願者。',
+                        contentEn: 'Participant acknowledges and agrees to accept any on-site emergency medical treatment provided by the Company in the event of an accident during the competition. Participant will bear all medical expenses, hospitalization costs or any other direct and indirect expenses associated with the accident. If Participant lose consciousness, the Company\'s emergency volunteers may take all necessary measures to provide first aid, including but not limited to CPR, the use of an AED, and the rental of vehicles or aircraft for rapid transport.Any resulting legal responsibilities and associated costs will be wholly borne by participant, and Participant will not hold the Company, the personnel involved in the rescue, or any emergency volunteers liable for any legal or financial responsibilities.'
+                    }
+                ],
+                currentStep: 1,
+                agreement: false,
+                valid: true,
+                menu: false,
+                displaySignError: false,
+                displayGuardianSignError: false,
+                loading:false,
+                logoUrl: 'https://drive.google.com/thumbnail?id=1KZnWT2PKNJJY8Je-yN6ZAII2a83qTtAG',
+                formData: {
+                    chineseName: '',
+                    englishName: '',
+                    dateOfBirth: '',
+                    date: new Date().toISOString().substr(0, 10),
+                    idNumber: '',
+                    gender: '',
+                    emergencyContact: '',
+                    emergencyPhone: '',
+                    emergencyRelationship: '',
+                    guardianName: '',
+                    tel: '',
+                    email: '',
+                    signature: {
+                        label: "簽名 Signature",
+                        type: "signature",
+                        value: "",
+                        disabled: false,
+                        placeholder: "請按下簽名 Please press to sign",
+                        items: [],
+                        rules: [(v) => !!v || "必需填寫! This is required!"],
+                    },
+                    //guardianEmail: '',
+                    guardianSignature: {
+                        label: "家長或監護人簽名（適用於未滿18歲參加者） <br/> Parent or Guardian Signature (Applicable to participants under 18 years old)",
+                        type: "signature",
+                        value: "",
+                        disabled: false,
+                        placeholder: "請按下簽名 Please press to sign",
+                        items: [],
+                        rules: [(v) => !!v || "必需填寫! This is required!"],
+                    },
+                },
+                api_response: { 
+                  success: false, 
+                  is_under_18: false,
+                  guardian_signature_link: ""
+                },
+                snackbar: false,
+                snackbarMessage: '己複製連結!',
+                guardianRules: [
+                    v => (!this.isUnder18_rules(this) || !!v) || '未滿18歲必須填寫此欄 This field is required for participants under 18',
+                ],
+                genderOptions: [
+                    { text: '男 Male', value: 'M' },
+                    { text: '女 Female', value: 'F' }
+                ],
+                nameRules: [
+                    v => !!v || '此欄必填 This field is required',
+                    v => v.length <= 50 || '不能超過50個字符 Cannot exceed 50 characters'
+                ],
+                idRules: [
+                    v => !!v || '此欄必填 This field is required',
+                    v => v.length <= 20 || '不能超過20個字符 Cannot exceed 20 characters'
+                ],
+                phoneRules: [
+                    v => !!v || '此欄必填 This field is required',
+                    v => /^\d{8}$/.test(v) || '請輸入8位數字 Please enter 8 digits'
+                ],
+                requiredRules: [
+                    v => !!v || '此欄必填 This field is required'
+                ],
+                emailRules: [
+                    v => !!v || '此欄必填 This field is required',
+                    v => v.length <= 50 || '不能超過50個字符 Cannot exceed 50 characters',
+                    v => /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(v) || '請輸入有效的電郵地址 Please enter a valid email address'
+                ],
+                requiredRules:[
+                    v => !!v || '此欄必填 This field is required',
+                ]
+            }),
+
+            computed: {
+                isUnder18_rules() {
+                    if (!this.formData.dateOfBirth) return false;
+                    const birthDate = new Date(this.formData.dateOfBirth);
+                    const today = new Date();
+                    const age = today.getFullYear() - birthDate.getFullYear();
+                    const monthDiff = today.getMonth() - birthDate.getMonth();
+                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                        age--;
+                    }
+                    return age < 18;
+                }
+            },
+
+            methods: {
+              updateDisplayGuardianSignErrorParentValue(newValue) {
+                this.displayGuardianSignError = newValue;
+              },
+              updateDisplaySignErrorParentValue(newValue){
+                this.displaySignError = newValue;
+              },
+              isUnder18() {
+                    if (!this.formData.dateOfBirth) return false;
+                    const birthDate = new Date(this.formData.dateOfBirth);
+                    const today = new Date();
+                    const age = today.getFullYear() - birthDate.getFullYear();
+                    const monthDiff = today.getMonth() - birthDate.getMonth();
+                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                        age--;
+                    }
+                    return age < 18;
+                },
+                nextStep() {
+                    if (this.currentStep === 1 && this.agreement) {
+                        this.currentStep = 2;
+                        this.scrollToTop();
+                    }
+                },
+
+                previousStep() {
+                    this.currentStep = 1;
+                    this.scrollToTop();
+                },
+
+                async submitForm() {
+                    if (this.checkFormValues()) {
+                        this.loading = true
+                        try {
+                            if(this.formData.guardianSignature.value === '')
+                            {
+                              this.formData.guardianSignature.value='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII='
+                            }
+                            //const response = await apiCall('processForm', this.formData);
+                            //if (response.success) {
+                            //    this.currentStep = 3;
+                            //    this.scrollToTop();
+                            //    this.loading = false
+                            //}
+                            //else {
+                            //   this.loading = false
+                            //    alert('發生錯誤');
+                            //}
+                            fetch('https://script.google.com/macros/s/AKfycbwhSIdrj6FTtOMp5qjkpEfw3U-yt0WMgQP6HMLwJPMP5DeR39Z2xYQc_0D-yvyDUq3F/exec', {
+                                method: 'POST',
+                                body:  JSON.stringify(this.formData)
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log('Success:', data);
+                                this.api_response = data;
+                                this.currentStep = 3;
+                                this.scrollToTop();
+                                this.loading = false
+                            })
+                            .catch((error) => {
+                                this.loading = false
+                            });
+                        }
+                        catch (error) {
+                            this.loading = false
+                            alert('發生錯誤');
+                            console.error('Error :', error);
+                        }
+                    }
+                   
+                },
+                checkFormValues() {
+                    let isValid = true;
+                    let firstErrorElement = null;
+
+                    // Validate form fields
+                    if (!this.$refs.form.validate()) {
+                        isValid = false;
+                        firstErrorElement = this.$el.querySelector('.error--text');
+                    }
+
+                    // Check birthday and gender
+                    if (!this.formData.dateOfBirth || !this.formData.gender) {
+                        isValid = false;
+                        if (!firstErrorElement) {
+                            firstErrorElement = this.$el.querySelector('[name="dateOfBirth"], [name="gender"]');
+                        }
+                    }
+
+                    // Check birthday and gender
+                    if (!this.formData.dateOfBirth || !this.formData.gender) {
+                        isValid = false;
+                        if (!firstErrorElement) {
+                            firstErrorElement = this.$el.querySelector('[name="dateOfBirth"], [name="gender"]');
+                        }
+                        console.log('Birthday or gender is missing');
+                    }
+
+                    // Check signatures
+                    if (!this.formData.signature.value) {
+                        isValid = false;
+                        this.displaySignError = true
+                        if (!firstErrorElement) {
+                            firstErrorElement = this.$el.querySelector('.signature-display');
+                        }
+                    }
+
+
+                    /*
+                    if (!this.formData.guardianSignature.value && this.isUnder18()) {
+                        isValid = false;
+                        this.displayGuardianSignError = true
+                        if (!firstErrorElement) {
+                            firstErrorElement = this.$el.querySelector('.guardian-signature-display');
+                        }
+                    }
+                    */
+
+                    // Scroll to first error element
+                    if (firstErrorElement) {
+                        firstErrorElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                    }
+
+                    return isValid;
+                },
+
+
+                onSuccess(response) {
+                    alert('表格提交成功！Form submitted successfully!');
+                    this.$refs.form.reset();
+                    this.currentStep = 1;
+                    this.agreement = false;
+                },
+
+                onFailure(error) {
+                    alert('提交失敗，請稍後再試。Submission failed, please try again later.');
+                    console.error('Error:', error);
+                },
+                scrollToTop() {
+                    window.scrollTo({
+                        top: 0,
+                        behavior: 'smooth'
+                    });
+                },
+               copyLink() {
+                  this.snackbar = true; // 顯示彈出提示
+        
+                  // 設定 5 秒後自動關閉
+                  setTimeout(() => {
+                    this.snackbar = false;
+                  }, 5000);
+              }
+            }
+        });
+  </script>
+  <script>
+    function copyToClipboard() {
+      const str = document.getElementById('linkTextarea').innerText;
+      const el = document.createElement('textarea');
+      el.value = str;
+      el.setAttribute('readonly', '');
+      el.style.position = 'absolute';
+      el.style.left = '-9999px';
+      document.body.appendChild(el);
+      el.select();
+      document.execCommand('copy');
+      document.body.removeChild(el);
+      document.getElementById('popupmessage').click();
+    }
+  </script>
+  
+</body>
+
+</html>
